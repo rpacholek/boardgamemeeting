@@ -1,0 +1,173 @@
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+}
+
+.game {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-info {
+  margin-left: 20px;
+}
+
+.game-front {
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+  vertical-align: middle;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  /*align-self: center;*/
+}
+
+.game-title-bar {
+  position: absolute;
+  top: 0px;
+  width: 85%;
+  line-height: 240px;
+}
+
+.game-title {
+  color: #ffffff;
+  font-weight: bold;
+  text-align: right;
+  width: 100%;
+  line-height: 1.5;
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.7);
+  vertical-align: bottom;
+}
+
+.game-card {
+  width: 320px;
+  padding: 15px;
+}
+
+.game-main {
+  justify-content: center;
+  text-align: center;
+  height: 340px;
+}
+
+@media screen and (max-width: 2000px) {
+  .game-card {
+    width: 250px;
+  }
+
+  .game-main {
+    height: 250px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .game-card {
+    width: 200px;
+  }
+
+  .game-main {
+    height: 200px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .game-card {
+    width: 100px;
+  }
+
+  .game-main {
+    height: 100px;
+  }
+}
+
+
+.game-image {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.miniature {
+  width: 12px;
+  height: 12px
+}
+
+.card {
+  margin: 15px;
+}
+
+.game-owner {
+  text-align: center;
+  font-weight: bold;
+}
+
+.game-stats {
+  width: 100%;
+  margin-bottom: 0px;
+  font-weight: bold;
+}
+
+.game-inner-footer {
+  width: 100%;
+}
+
+.game-footer {
+  display: block;
+  width: 100%;
+}
+
+.filters {
+  margin: auto;
+  width: 800px;
+}
+
+.filter-wrapper {
+  background-color: #efefef;
+  width: 100%;
+  height: 300px;
+  padding: 20px;
+}
+
+.centered {
+  text-align: center;
+}
+
+.game-range {
+  padding: 10px;
+}
+
+.filter-select {
+  width: 80%;
+}
+
+.filter-option {
+  text-align: center;
+}
+
+.game-table table {
+  margin: auto;
+}
+
+.game-table table, th, td{
+  border: 1px solid black;
+}
+
+.game-table td {
+  padding: 3px;
+  text-align: center; 
+}
+
+.mygame-list {
+  width: 800px;
+}
+
+.game-list-label {
+  display: inline-block;
+  width: 80%
+}
