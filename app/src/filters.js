@@ -9,8 +9,8 @@ import InputRange from 'react-input-range';
 function getAllOwners(games){
     let owners = new Set();
     games.forEach(game => {
-      if (game.owner) {
-        game.owner.forEach(owner => owners.add(owner));
+      if (game.owners) {
+        game.owners.forEach(owner => owners.add(owner));
       } else {
         //console.log(game);
         //owners.add("Unknown");
@@ -22,9 +22,9 @@ function getAllOwners(games){
 function filterOwners(games, owners) {
   let returnGames = [];
   games.forEach(game => {
-    if (game.owner){
+    if (game.owners){
       for(let i=0; i<owners.length; i++){
-        if (game.owner.indexOf(owners[i]) != -1){
+        if (game.owners.indexOf(owners[i]) != -1){
           returnGames.push(game);
           break;
         }

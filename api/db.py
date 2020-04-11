@@ -1,6 +1,11 @@
 from pony.orm import *
 from decimal import Decimal
 from collections import defaultdict
+import hashlib
+from bggengine import *
+
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
 
 db = Database()
 
@@ -40,6 +45,7 @@ class UserGames(db.Entity):
     in_delivery = Required(bool, default=False)
     on_radar = Required(bool, default=False)
     new = Required(bool, default=False)
+    not_available = Required(bool, default=False)
 
     # Date
 
@@ -48,7 +54,8 @@ class UserGames(db.Entity):
             "possesed": self.possesed,
             "in_delivery": self.in_delivery,
             "on_radar": self.on_radar,
-            "new": self.new
+            "new": self.new,
+            "not_available": self.not_available
         }
 
 class Users(db.Entity):
@@ -67,37 +74,39 @@ db.generate_mapping(create_tables=True)
 
 @db_session
 def fill():
-    u1 = Users(name='User3', password='test')
-    u2 = Users(name='User2', password='test', friends=[u1])
-    u3 = Users(name='user1', password='abcxyz', friends=[u1, u2])
-
-    game1 = Games(id=1, name='Carcassonne', time=30, min_players=2, max_players=5, rating=8.0, weight=1.0)
-    game2 = Games(id=2, name='Concordia', time=40, min_players=3, max_players=5, rating=9.0, weight=4.0)
-    game3 = Games(id=3, name='Sushi Go! Party', time=50, min_players=2, max_players=8, rating=8.5, weight=2.0)
-
-    UserGames(user=u1, game=game1)
-    UserGames(user=u1, game=game2)
-    UserGames(user=u2, game=game3)
-    UserGames(user=u3, game=game2)
+    u1 = Users(name='User3', password=hash_password('test'))
+    u2 = Users(name='User2', password=hash_password('test'), friends=[u1])
+    u3 = Users(name='user1', password=hash_password('abcxyz'), friends=[u1, u2])
 
     commit()
 
+    add_game(u1.name, 28720) # Brass: Lancashire
+    add_game(u1.name, 2651) # Power grid
+    add_game(u2.name, 192291)
+    add_game(u2.name, 124361)
+    add_game(u3.name, 21241)
+
+
 @db_session
 def create_user(name, password):
-    Users(name=name, password=password)
+    Users(name=name, password=hash_password(password))
 
 @db_session
-def check_password(name, password):
-    return Users.get(name=name, password=password) is not None
+def get_user(name, password):
+    return Users.get(name=name, password=hash_password(password))
 
 @db_session
-def add_game(user, game_id, status):
+def get_user_by_id(userid):
+    return Users.get(id=userid)
+
+@db_session
+def add_game(user, game_id, status={}):
     game = Games.get(id=game_id)
     if not game:
         game = Games(**get_game_details(game_id))
     user = Users.get(name=user)
 
-    UserGame(user=user, game=game, **status)
+    UserGames(user=user, game=game, **status)
 
 @db_session
 def remove_game(user, game_id):
@@ -132,7 +141,7 @@ def get_user_games(usergames, **kwargs):
             "status": usergame.status(),
             **kwargs
         })
-    return [ {**game["info"], "status": game["status"]} for game in games ]
+    return games
 
 def merge_owners(games):
     game_dict = {}

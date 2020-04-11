@@ -8,23 +8,13 @@ import hashlib
 import bggengine
 import db
 
-with open('./games.json') as f:
-    cached_games = f.read() 
-
-username_table = {u.username: u for u in users}
-userid_table = {u.id: u for u in users}
-
-def hash_password(password):
-    return hashlib.sha256(password).hexdigest()
 
 def authenticate(username, password):
-    user = username_table.get(username, None)
-    if user and safe_str_cmp(user.password.encode('utf-8'), password.encode('utf-8')):
-        return user
+    return db.get_user(username, password)
 
 def identity(payload):
     user_id = payload['identity']
-    return userid_table.get(user_id, None)
+    return db.get_user_by_id(user_id).name
 
 app = Flask(__name__)
 app.debug = True
@@ -36,7 +26,7 @@ jwt = JWT(app, authenticate, identity)
 @app.route('/api/games')
 @jwt_required()
 def game_list():
-    return cached_games
+    return json.dumps(db.list_games(current_identity))
 
 @app.route('/api/search', methods=['POST'])
 @jwt_required()
@@ -59,7 +49,7 @@ def add_user_game():
 @app.route('/api/user/games', methods=['GET'])
 @jwt_required()
 def list_user_game():
-    return cached_games
+    return json.dumps(db.list_user_games(current_identity))
 
 @app.route('/api/user/friends')
 @jwt_required()

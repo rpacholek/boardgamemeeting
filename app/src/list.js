@@ -8,26 +8,26 @@ import GameFilter from './filters.js';
 
 class Game extends React.Component {
   render() {
-    if (this.props.value.official_name != null) {
-      const owners = this.props.value.owner.map((owner) =>
+    if (this.props.value.name != null) {
+      const owners = this.props.value.owners.map((owner) =>
         <span key={owner} className="column">{owner}</span>
       )
       return (
         <div className="card game-card">
             <div className="game-main">
                 <div className="game-image">
-                  <img src={this.props.value.image} alt={this.props.value.official_name} className="game-front" />
+                  <img src={this.props.value.image} alt={this.props.value.name} className="game-front" />
                 </div>
                 <div className="game-title-bar">
-                  <h1 className="game-title is-size-3">{this.props.value.official_name}</h1>
+                  <h1 className="game-title is-size-3">{this.props.value.name}</h1>
                 </div>
             </div>
             <div className="card-footer game-footer">
               <div className="game-inner-footer">
                 <div className="columns game-stats is-small">
                   <div className="column"> <img src="/icons/timer.svg" className="miniature" /> {this.props.value.time}</div>
-                  <div className="column"> <img src="/icons/people.svg" className="miniature" /> {this.props.value.min_player}-{this.props.value.max_player}</div>
-                  <div className="column"> <img src="/icons/star.svg" className="miniature" /> {this.props.value.score.toFixed(2)}</div>
+                  <div className="column"> <img src="/icons/people.svg" className="miniature" /> {this.props.value.min_players}-{this.props.value.max_players}</div>
+                  <div className="column"> <img src="/icons/star.svg" className="miniature" /> {this.props.value.rating.toFixed(2)}</div>
                   <div className="column"> <img src="/icons/cog.svg" className="miniature" /> {this.props.value.weight.toFixed(2)}</div>
                 </div>
                 <div className="columns game-owner">
@@ -50,11 +50,11 @@ class GameTable extends React.Component {
     const games = this.props.render_games;
     const gameList = games.map((game) =>
       <tr>
-        <td>{game.official_name}</td>
-        <td>{game.owner.join(', ')}</td>
+        <td>{game.name}</td>
+        <td>{game.owners.join(', ')}</td>
         <td>{game.time}</td>
-        <td>{game.min_player}-{game.max_player}</td>
-        <td>{game.score.toFixed(2)}</td>
+        <td>{game.min_players}-{game.max_players}</td>
+        <td>{game.rating.toFixed(2)}</td>
         <td>{game.weight.toFixed(2)}</td>
       </tr>
     );
@@ -144,9 +144,9 @@ class Games extends React.Component {
         <GameFilter games={this.state.games} displayGames={this.displayGames} />
         <div className="tabs is-centered is-large">
           <ul>
-            <li className={this.state.view == 0 && "is-active"}><a onClick={()=> this.setState({view: 0})}>Grid</a></li>
-            <li className={this.state.view == 1 && "is-active"}><a onClick={()=> this.setState({view: 1})}>Table</a></li>
-            <li className={this.state.view == 2 && "is-active"}><a onClick={()=> this.setState({view: 2})}>Stats</a></li>
+            <li className={this.state.view == 0 ? "is-active" : ""}><a onClick={()=> this.setState({view: 0})}>Grid</a></li>
+            <li className={this.state.view == 1 ? "is-active" : ""}><a onClick={()=> this.setState({view: 1})}>Table</a></li>
+            <li className={this.state.view == 2 ? "is-active" : ""}><a onClick={()=> this.setState({view: 2})}>Stats</a></li>
           </ul>
         </div>
         {this.state.view == 0 && <GamePanel render_games={this.state.render_games} />}

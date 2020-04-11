@@ -160,10 +160,10 @@ class GameListItem extends React.Component {
     return (
       <div className="mygame-list columns">
         <div className="column is-2">
-          <img src={this.props.game.image} className="game-list-minature" />
+          <img src={this.props.game.info.image} className="game-list-minature" />
         </div>
         <div className="column  is-4">
-          {this.props.game.official_name}
+          {this.props.game.info.name}
         </div>
         <div className="column is-4">
             {stats}
@@ -215,12 +215,22 @@ class MyGames extends React.Component {
   }
 
   updateGames() {
-    axios.get("games.json").then( response => {
-      this.setState({
-        games: response.data,
-        render_games: response.data,
-      })
-    })
+    axios({
+          method: 'GET',
+          url: 'http://localhost:5000/api/user/games',
+          headers: {
+            "Access-Control-Allow-Origin": '*',
+            "Authorization": "JWT " + this.props.token,
+          }
+        }).then( response => {
+          console.log(response)
+           this.setState({
+            games: response.data,
+            render_games: response.data,
+          })
+        }).catch( error => {
+          console.log(error);
+        })
   }
 
   displayGames(games) {
