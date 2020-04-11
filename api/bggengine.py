@@ -31,7 +31,7 @@ def search(search_str):
         pass
 
     search_results = client.search(search_str, search_type=[board_game_type])
-    return games + [client.game(game_id=game.id) for game in search_results[:5]]
+    return games + [client.game(game_id=game.id) for game in search_results[:2] if not games or game.id != games[0].id ]
 
 def search_output(game):
     client = boardgamegeek.BGGClient()

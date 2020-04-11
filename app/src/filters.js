@@ -37,7 +37,7 @@ function filterOwners(games, owners) {
 function filterPlayers(games, value){
   let returnGames = [];
   games.forEach(game => {
-    if (! ((value.max < game.min_player) || (game.max_player < value.min))){
+    if (! ((value.max < game.min_players) || (game.max_players < value.min))){
       returnGames.push(game);
     }
   });
@@ -47,7 +47,7 @@ function filterPlayers(games, value){
 function filterScore(games, value){
   let returnGames = [];
   games.forEach(game => {
-    if ((value.min <= game.score) && (game.score <= value.max)){
+    if ((value.min <= game.rating) && (game.rating <= value.max)){
       returnGames.push(game);
     }
   });
@@ -189,7 +189,7 @@ class ScoreFilter extends React.Component {
   render(){
     return (
       <div className="game-range">
-        <h3>Average score</h3>
+        <h3>Average rating</h3>
         <InputRange
           minValue={1} 
           maxValue={10} 

@@ -58,6 +58,19 @@ class UserGames(db.Entity):
             "not_available": self.not_available
         }
 
+    def set_status(self, **s):
+        if "possesed" in s:
+            self.possesed = s["possesed"]
+        if "in_delivery" in s:
+            self.in_delivery = s["in_delivery"]
+        if "on_radar" in s:
+            self.on_radar = s["on_radar"]
+        if "new" in s:
+            self.new = s["new"]
+        if "now_available" in s:
+            self.not_available = s["not_available"]
+
+
 class Users(db.Entity):
     id = PrimaryKey(int, auto=True)
     name = Required(str, unique=True)
@@ -106,15 +119,26 @@ def add_game(user, game_id, status={}):
         game = Games(**get_game_details(game_id))
     user = Users.get(name=user)
 
-    UserGames(user=user, game=game, **status)
+    UserGames(user=user, game=game).set_status(**status)
 
 @db_session
 def remove_game(user, game_id):
-    pass
+    usergame = find_game(user, game_id)
+    if usergame:
+        usergame.delete()
 
 @db_session
-def update_game(user, game_id, status):
-    pass
+def update_game(user, game_id, status={}):
+    usergame = find_game(user, game_id)
+    if usergame:
+        usergame.set_status(**status)
+
+def find_game(username, gameid):
+    user = Users.get(name=username)
+    game = Games.get(id=gameid)
+    if user and game:
+        return UserGames.get(user=user, game=game)
+    return None
 
 @db_session
 def invite_friend(user, name):

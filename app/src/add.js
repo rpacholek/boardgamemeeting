@@ -74,13 +74,9 @@ class AddGame extends React.Component {
           },
           data: {
             id: this.state.selected.id,
-            name: this.state.selected.name
+            name: this.state.selected.name,
+            status: this.state.status 
           }
-        }).then( response => {
-          console.log(response)
-          this.setState({
-            found: response.data
-          })
         }).catch( error => {
           console.log(error);
         })

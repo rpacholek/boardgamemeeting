@@ -38,12 +38,14 @@ def game_search():
 @app.route('/api/user/game', methods=['POST', 'PUT', 'DELETE'])
 @jwt_required()
 def add_user_game():
+    data = json.loads(request.data)
     if request.method == 'POST':
-        "Add"
+        db.add_game(current_identity, data["id"], data["status"])
     elif request.method == 'PUT':
-        "Update"
+        db.update_game(current_identity, data["id"], data["status"])
     elif request.method == 'DELETE':
-        "Delete"
+        db.delete_game(current_identity, data["id"])
+    return "Ok"
 
 @app.route('/api/user/games', methods=['GET'])
 @jwt_required()
@@ -66,8 +68,8 @@ def handle_invitation(inv_id):
     pass
 
 @app.route('/api')
-def test2():
-    return "test2"
+def alive_check():
+    return "I am alive"
 
 if __name__ == '__main__':
     app.run()
