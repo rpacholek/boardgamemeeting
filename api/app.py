@@ -1,7 +1,6 @@
 from flask import Flask, request
 from flask_jwt import JWT, jwt_required, current_identity, _jwt_required
 from flask_cors import CORS
-from werkzeug.security import safe_str_cmp
 import json
 import hashlib
 
@@ -65,6 +64,10 @@ def list_invitations():
 @jwt_required()
 def handle_invitation(inv_id):
     pass
+
+@app.route('/api')
+def test2():
+    return "test2"
 
 if __name__ == '__main__':
     app.run()

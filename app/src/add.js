@@ -44,7 +44,7 @@ class AddGame extends React.Component {
     if (name) {
       axios({
         method: 'POST',
-        url: 'http://localhost:5000/api/search',
+        url: '/api/search',
         headers: {
           "Access-Control-Allow-Origin": '*',
           "Authorization": "JWT " + this.props.token,
@@ -67,7 +67,7 @@ class AddGame extends React.Component {
     if (this.state.selected.id > 0) {
       axios({
           method: 'POST',
-          url: 'http://localhost:5000/api/user/game',
+          url: '/api/user/game',
           headers: {
             "Access-Control-Allow-Origin": '*',
             "Authorization": "JWT " + this.props.token,
@@ -217,7 +217,7 @@ class MyGames extends React.Component {
   updateGames() {
     axios({
           method: 'GET',
-          url: 'http://localhost:5000/api/user/games',
+          url: '/api/user/games',
           headers: {
             "Access-Control-Allow-Origin": '*',
             "Authorization": "JWT " + this.props.token,

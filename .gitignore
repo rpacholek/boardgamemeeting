@@ -27,6 +27,7 @@ yarn-error.log*
 
 ## API
 *.sqlite
+dev_env
 
 # Created by https://www.gitignore.io/api/vim,react,linux,python
 # Edit at https://www.gitignore.io/?templates=vim,react,linux,python

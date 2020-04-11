@@ -21,7 +21,7 @@ class Menu extends React.Component {
   auth(menu) {
     axios({
       method: 'post',
-      url: 'http://localhost:5000/auth', 
+      url: '/auth', 
       headers: {
         "Access-Control-Allow-Origin": '*',
       },

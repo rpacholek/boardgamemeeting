@@ -121,7 +121,7 @@ class Games extends React.Component {
     if(this.props.token !== "") {
       axios({
         method: 'get',
-        url: 'http://localhost:5000/api/games', 
+        url: '/api/games', 
         headers: {
           "Access-Control-Allow-Origin": '*',
           "Authorization": "JWT " + this.props.token,
