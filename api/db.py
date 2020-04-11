@@ -142,7 +142,8 @@ def find_game(username, gameid):
 
 @db_session
 def invite_friend(user, name):
-    pass
+    user = Users.get(name=user)
+    user.friends.add(Users.get(name=name))
 
 @db_session
 def invite_accept(user, name):

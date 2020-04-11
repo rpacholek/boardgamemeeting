@@ -14,11 +14,18 @@ class Menu extends React.Component {
       token: "",
     };
 
-    this.auth(this);
+    this.credentials = {
+      login: "",
+      password: ""
+    }
+
+    this.auth = this.auth.bind(this);
   }
 
 
-  auth(menu) {
+  auth(user, password) {
+    console.log(user + " " + password)
+    let menu = this;
     axios({
       method: 'post',
       url: '/auth', 
@@ -26,8 +33,8 @@ class Menu extends React.Component {
         "Access-Control-Allow-Origin": '*',
       },
       data: {
-        username: "user1",
-        password: "abcxyz"
+        username: user,
+        password: password
       }
     }).then(function (response) {
       console.log(response);
@@ -71,7 +78,24 @@ class Menu extends React.Component {
     </div>
     )
     } else {
-      return (<h1>Implement me</h1>)
+      return (
+     <div className={"modal " + (this.state.token ? "": "is-active")}>
+      <div className="modal-background"></div>
+      <div className="login-card modal-card">
+        <div className="login-box box">
+              <div className="login-input">
+                <input className="input is-rounded" type="text" placeholder="Login" ref={(c) => this.credentials.login = c} />
+              </div>
+              <div className="login-input">
+                <input className="input is-rounded" placeholder="Password" type="password" ref={(c) => this.credentials.password = c} />
+              </div>
+              <div className="login-submit">
+                <button onClick={() => this.auth(this.credentials.login.value, this.credentials.password.value)}  className="button is-link">Login</button>
+              </div>
+        </div>
+      </div>
+    </div> 
+      )
     }
   }
 }

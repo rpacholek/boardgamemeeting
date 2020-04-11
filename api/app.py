@@ -1,23 +1,27 @@
 from flask import Flask, request
-from flask_jwt import JWT, jwt_required, current_identity, _jwt_required
+from flask_jwt import JWT, jwt_required, current_identity 
 from flask_cors import CORS
 import json
 import hashlib
+import datetime
 
 import bggengine
 import db
 
 
 def authenticate(username, password):
+    print(username, password)
     return db.get_user(username, password)
 
 def identity(payload):
+    print(payload)
     user_id = payload['identity']
     return db.get_user_by_id(user_id).name
 
 app = Flask(__name__)
 app.debug = True
 app.config['SECRET_KEY'] = 'super-secret'
+app.config['JWT_EXPIRATION_DELTA'] = datetime.timedelta(hours=1)
 CORS(app)
 
 jwt = JWT(app, authenticate, identity)

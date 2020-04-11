@@ -29,6 +29,7 @@ yarn-error.log*
 *.sqlite
 dev_env
 nginx.pid
+api/*.json
 
 # Created by https://www.gitignore.io/api/vim,react,linux,python
 # Edit at https://www.gitignore.io/?templates=vim,react,linux,python
