@@ -142,17 +142,48 @@ def find_game(username, gameid):
     return None
 
 @db_session
-def invite_friend(user, name):
+def add_friend(user, name):
     user = Users.get(name=user)
     user.friends.add(Users.get(name=name))
 
 @db_session
+def invite_friend(user, name):
+    user = Users.get(name=user)
+    friend = User.get(name=name)
+    if friend:
+        friend.invitations.add(user)
+
+@db_session
 def invite_accept(user, name):
-    pass
+    user = Users.get(name=user)
+    if friends:
+        friends[0].friends.add(user)
+        user.friends.add(friends[0])
 
 @db_session
 def invite_decline(user, name):
-    pass
+    user = Users.get(name=user)
+    friends = user.invitations.select(lambda f: f.name == name)
+    if friends:
+        user.invitations.delete(friends[0])
+
+@db_session
+def invitations_list(user):
+    user = Users.get(name=user)
+    return [friend.name for friend in user.invitations]
+
+@db_session
+def friends_list(user):
+    user = Users.get(name=user)
+    return [friend.name for friend in user.friends]
+
+@db_session
+def friends_remove(user, name):
+    user = Users.get(name=user)
+    friends = user.invitations.select(lambda f: f.name == name)
+    if friends:
+        user.friends.delete(friends[0])
+        friends[0].friends.delete(user)
 
 @db_session
 def list_user_games(user):

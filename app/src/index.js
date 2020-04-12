@@ -56,22 +56,18 @@ class Menu extends React.Component {
     if (this.state.token !== "") {
     return (
     <div>
-    <nav className="navbar" role="navigation" aria-label="main navigation">
+    <nav className="navbar is-link" role="navigation" aria-label="main navigation">
       <div className="navbar-menu">
         <div className="navbar-start">
-          <a className="navbar-item {this.state.website == 0 && 'is-active'}" 
+          <a className="navbar-item is-spaced {this.state.website == 0 && 'is-active'}" 
               onClick={()=>this.setState({website:0})}>
             List
           </a>
-        </div>
-        <div className="navbar-start">
-          <a className="navbar-item {this.state.website == 1 && 'is-active'}"
+          <a className="navbar-item is-spaced {this.state.website == 1 && 'is-active'}"
               onClick={()=>this.setState({website:1})}>
             MyGames
           </a>
-        </div>
-        <div className="navbar-start">
-          <a className="navbar-item" onClick={()=>this.setState({website:2})}>
+          <a className="navbar-item is-spaced" onClick={()=>this.setState({website:2})}>
             Meeting
           </a>
         </div>

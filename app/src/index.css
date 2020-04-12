@@ -195,3 +195,7 @@ body {
   margin: 0 auto;
   width: 100px;
 }
+
+.navbar {
+  margin-bottom: 30px;
+}
