@@ -77,13 +77,17 @@ class AddGame extends React.Component {
             name: this.state.selected.name,
             status: this.state.status 
           }
+        }).then(response => {
+          this.props.refresh();
         }).catch( error => {
           console.log(error);
         })
       this.setState({...this.clear_state});
-      this.props.onSubmit();
     }
   }
+
+
+
 
   toggleStatus(key){
     let statuses = this.state.status;
@@ -136,21 +140,74 @@ class AddGame extends React.Component {
 }
 
 function Checkbox(props) {
+  const value = props.value;
   return (
       <div className="column">
-        <input type="checkbox" checked={props.value} onClick={props.onClick} /><label className="game-list-label">{props.label}</label>
+        <input type="checkbox" checked={value} onClick={props.onClick} /><label className="game-list-label">{props.label}</label>
       </div>
   )
 }
 
 class GameListItem extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      game: this.props.game,
+      status: this.props.game.status,
+    }
+
+    this.updateGame = this.updateGame.bind(this);
+    this.removeGame = this.removeGame.bind(this);
+    this.updateStatus = this.updateStatus.bind(this);
+  }
+  updateGame(){
+    console.log(this.state);
+    console.log(this.state.game);
+        axios({
+          method: 'PUT',
+          url: '/api/user/game/' + this.state.game.info.id,
+          headers: {
+            "Access-Control-Allow-Origin": '*',
+            "Authorization": "JWT " + this.props.token,
+          },
+          data: {
+            status: this.state.status 
+          }
+        }).then(response => {
+          this.props.refresh();
+        }).catch( error => {
+          console.log(error);
+        })
+  }
+
+  removeGame(id){
+        axios({
+          method: 'DELETE',
+          url: '/api/user/game/' + this.state.game.info.id,
+          headers: {
+            "Access-Control-Allow-Origin": '*',
+            "Authorization": "JWT " + this.props.token,
+          }
+        }).then(response => {
+          this.props.refresh();
+        }).catch( error => {
+          console.log(error);
+        })
+  }
+
+  updateStatus(key, value) {
+    let s = this.state.status;
+    s[key] = value;
+    this.setState(s);
+    this.updateGame();
+  }
 
   render() {
-    const game = this.props.game;
+    const game = this.state.game;
     let stats = (<h1>No games</h1>);
-    if (game && game.status) {
-      stats = Object.keys(game.status).map( (key) => 
-        <Checkbox label={key} value={game.status[key]} />
+    if (this.state.game && this.state.status) {
+      stats = Object.keys(this.state.status).map( (key) => 
+        <Checkbox label={key} value={this.state.status[key]} onClick={(event) => {this.updateStatus(key, event.target.checked)}} />
       )
     }
     return (
@@ -165,7 +222,7 @@ class GameListItem extends React.Component {
             {stats}
         </div>
         <div className="column is-1">
-          <button>Remove</button>
+          <button onClick={() => this.removeGame()}>Remove</button>
         </div>
       </div>
     )
@@ -179,7 +236,7 @@ class GameList extends React.Component {
     const games = this.props.render_games;
     const gameList = games.map((game) =>
       <div>
-      <GameListItem game={game} /> 
+      <GameListItem token={this.props.token} refresh={this.props.refresh} game={game} /> 
       <hr />
       </div>
     );
@@ -239,9 +296,9 @@ class MyGames extends React.Component {
     return (
       <div className="centered">
         <h1>The games</h1>
-        <AddGame token={this.props.token} onSubmit={() => this.updateGames()}/>
+        <AddGame token={this.props.token} refresh={() => this.updateGames()}/>
         <hr />
-        <GameList render_games={this.state.render_games} /> 
+        <GameList token={this.props.token} refresh={() => this.updateGames()} render_games={this.state.render_games} /> 
       </div>
     );
   }

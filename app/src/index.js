@@ -20,6 +20,7 @@ class Menu extends React.Component {
     }
 
     this.auth = this.auth.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
 
@@ -42,6 +43,12 @@ class Menu extends React.Component {
     }).catch(function(error) {
       console.log(error);
     })
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.auth(this.credentials.login.value, this.credentials.password.value);
+    return false;
   }
 
 
@@ -83,6 +90,7 @@ class Menu extends React.Component {
       <div className="modal-background"></div>
       <div className="login-card modal-card">
         <div className="login-box box">
+            <form onSubmit={this.handleSubmit}>
               <div className="login-input">
                 <input className="input is-rounded" type="text" placeholder="Login" ref={(c) => this.credentials.login = c} />
               </div>
@@ -90,8 +98,9 @@ class Menu extends React.Component {
                 <input className="input is-rounded" placeholder="Password" type="password" ref={(c) => this.credentials.password = c} />
               </div>
               <div className="login-submit">
-                <button onClick={() => this.auth(this.credentials.login.value, this.credentials.password.value)}  className="button is-link">Login</button>
+                <button onClick={this.handleSubmit}  className="button is-link">Login</button>
               </div>
+            </form>
         </div>
       </div>
     </div> 

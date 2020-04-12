@@ -122,7 +122,7 @@ def add_game(user, game_id, status={}):
     UserGames(user=user, game=game).set_status(**status)
 
 @db_session
-def remove_game(user, game_id):
+def delete_game(user, game_id):
     usergame = find_game(user, game_id)
     if usergame:
         usergame.delete()
@@ -137,7 +137,8 @@ def find_game(username, gameid):
     user = Users.get(name=username)
     game = Games.get(id=gameid)
     if user and game:
-        return UserGames.get(user=user, game=game)
+        usergames = select(ug for ug in UserGames if ug.user == user and ug.game == game)
+        return usergames and usergames[:][0]
     return None
 
 @db_session

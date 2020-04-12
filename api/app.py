@@ -39,16 +39,23 @@ def game_search():
     result = list( map( bggengine.search_output, bggengine.search(query)))
     return json.dumps(result)
 
-@app.route('/api/user/game', methods=['POST', 'PUT', 'DELETE'])
+@app.route('/api/user/game/<gameid>', methods=['PUT', 'DELETE'])
+@jwt_required()
+def edit_user_game(gameid):
+    if request.method == 'PUT':
+        data = json.loads(request.data)
+        db.update_game(current_identity, gameid, data["status"])
+    elif request.method == 'DELETE':
+        db.delete_game(current_identity, gameid)
+    return "Ok"
+
+@app.route('/api/user/game', methods=['POST'])
 @jwt_required()
 def add_user_game():
     data = json.loads(request.data)
+    print(data)
     if request.method == 'POST':
         db.add_game(current_identity, data["id"], data["status"])
-    elif request.method == 'PUT':
-        db.update_game(current_identity, data["id"], data["status"])
-    elif request.method == 'DELETE':
-        db.delete_game(current_identity, data["id"])
     return "Ok"
 
 @app.route('/api/user/games', methods=['GET'])
