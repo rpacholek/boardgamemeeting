@@ -203,14 +203,17 @@ def get_user_games(usergames, **kwargs):
 def merge_owners(games):
     game_dict = {}
     game_owners = defaultdict(list)
+    game_status = defaultdict(dict)
 
     for game in games:
         gid = game["info"]["id"]
         if gid not in game_dict:
             game_dict[gid] = game["info"]
         game_owners[gid].append(game["owner"])
+        game_status[gid][game["owner"]] = game["status"]
 
-    return [ {**game_dict[key], "owners": game_owners[key]} for key in game_dict.keys() ]
+
+    return [ {**game_dict[key], "owners": game_owners[key], "status": game_status[key]} for key in game_dict.keys() ]
 
 
 @db_session
@@ -223,6 +226,6 @@ def list_games(user):
     games = get_user_games(user.games, owner=user.name)
     for friend in user.friends:
         games += get_user_games(friend.games, owner=friend.name)
-    
+
     return merge_owners(games)
 

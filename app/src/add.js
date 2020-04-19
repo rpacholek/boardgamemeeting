@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {DelayInput} from 'react-delay-input';
 import List from 'react-list-select';
 import axios from 'axios';
+import StatusMap from './status_map.js';
 import './list-style.css';
 
 function GameDisplay(props) {
@@ -26,15 +27,10 @@ class AddGame extends React.Component {
         "image": "",
         "id": 0
       },
-      "status": {
-        "possesed": true,
-        "in_delivery": false,
-        "borrowed": false,
-        "on_radar": false,
-        "new": false,
-      },
+      "status": StatusMap.defaultDBMap(),
       "found": [],
     }
+
     this.state = {...this.clear_state};
     this.toggleStatus = this.toggleStatus.bind(this);
     this.addGame = this.addGame.bind(this);
@@ -97,7 +93,7 @@ class AddGame extends React.Component {
 
   render(){
     let stats = Object.keys(this.state.status).map( (key) => 
-      <Checkbox label={key} value={this.state.status[key]} onClick={() => this.toggleStatus(key)} />
+      <Checkbox label={StatusMap.displayName(key)} value={this.state.status[key]} onClick={() => this.toggleStatus(key)} />
     )
 
     let itemList = [];
@@ -161,8 +157,6 @@ class GameListItem extends React.Component {
     this.updateStatus = this.updateStatus.bind(this);
   }
   updateGame(){
-    console.log(this.state);
-    console.log(this.state.game);
         axios({
           method: 'PUT',
           url: '/api/user/game/' + this.state.game.info.id,
@@ -207,7 +201,7 @@ class GameListItem extends React.Component {
     let stats = (<h1>No games</h1>);
     if (this.state.game && this.state.status) {
       stats = Object.keys(this.state.status).map( (key) => 
-        <Checkbox label={key} value={this.state.status[key]} onClick={(event) => {this.updateStatus(key, event.target.checked)}} />
+        <Checkbox label={StatusMap.displayName(key)} value={this.state.status[key]} onClick={(event) => {this.updateStatus(key, event.target.checked)}} />
       )
     }
     return (

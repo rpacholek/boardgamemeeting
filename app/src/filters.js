@@ -4,6 +4,7 @@ import axios from 'axios';
 import 'bulma'
 import InputRange from 'react-input-range';
 import List from 'react-list-select';
+import StatusMap from './status_map.js';
 
 
 // Filter functions
@@ -13,7 +14,6 @@ function getAllOwners(games){
       if (game.owners) {
         game.owners.forEach(owner => owners.add(owner));
       } else {
-        //console.log(game);
         //owners.add("Unknown");
       }
     });
@@ -75,6 +75,22 @@ function filterTime(games, value){
   return returnGames;
 }
 
+function filterStatus(games, statuses) {
+  let returnGames = [];
+  games.forEach(game => {
+    if (game.status){
+      Object.keys(game.status).map((key) => {
+        for(let i=0; i<statuses.length; i++){
+          if (game.status[key][statuses[i]]){
+            returnGames.push(game);
+            return;
+          }
+        }
+      })
+    }
+  });
+  return returnGames;
+}
 
 // Filters
 
@@ -107,7 +123,7 @@ class OwnerFilter extends React.Component {
       <div className="filter-list">
         <List
             items={owners}
-            multiple={true}
+            mulitiple={true}
             selected={this.state.selected}
             onChange={(selected) => {this.handleChange(owners, selected)}} />
       </div>
@@ -133,12 +149,18 @@ class GameStatusFilter extends React.Component {
     }
   }
   
-  handleChange(statues, selected) {
+  handleChange(statuses, selected) {
+    this.setState({selected: selected});
+    let selected_status = [];
+    for(let i=0; i<selected.length; ++i){
+      selected_status.push(StatusMap.dbName(statuses[selected[i]]));
+    };
+    this.state.modifier(games => filterStatus(games, selected_status));
     // pass
   }
 
   render(){
-    const statuses = ["possesed", "new", "on radar", "soon", "not available"];
+    const statuses = StatusMap.getDisplayNames();
     return (
       <div className="filter-list">
         <List
