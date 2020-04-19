@@ -10,7 +10,7 @@ class Menu extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      website: 1,
+      website: 0,
       token: "",
     };
 
@@ -25,7 +25,6 @@ class Menu extends React.Component {
 
 
   auth(user, password) {
-    console.log(user + " " + password)
     let menu = this;
     axios({
       method: 'post',
@@ -38,7 +37,6 @@ class Menu extends React.Component {
         password: password
       }
     }).then(function (response) {
-      console.log(response);
       menu.setState({token: response.data.access_token});
     }).catch(function(error) {
       console.log(error);

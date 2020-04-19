@@ -99,6 +99,7 @@ function filterStatus(games, statuses) {
 class OwnerFilter extends React.Component {
   constructor(props) {
     super(props);
+    console.log("Created");
 
     this.state = {
       modifier: props.modifier,
@@ -115,17 +116,19 @@ class OwnerFilter extends React.Component {
     for(let i=0; i<selected.length; ++i){
       selected_owners.push(owners[selected[i]]);
     };
+    console.log(selected_owners);
 
     this.state.modifier(games => filterOwners(games, selected_owners));
   }
 
   render() {
     const owners = getAllOwners(this.props.games);
+    console.log(this.state.selected);
     return (
       <div className="filter-list">
         <List
             items={owners}
-            mulitiple={true}
+            multiple={true}
             selected={this.state.selected}
             onChange={(selected) => {this.handleChange(owners, selected)}} />
       </div>
@@ -152,6 +155,7 @@ class GameStatusFilter extends React.Component {
   }
   
   handleChange(statuses, selected) {
+    console.log(selected);
     this.setState({selected: selected});
     let selected_status = [];
     for(let i=0; i<selected.length; ++i){
