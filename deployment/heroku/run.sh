@@ -1,7 +1,8 @@
 #!/usr/bin/bash
 cd /app/api
-python3 create_db.py # Fill with test data
-
+if [ ! -f "database.sqlite" ]; then
+  python3 create_db.py # Fill with test data
+fi
 env
 
 if [ -z "$PORT" ]; then
