@@ -79,14 +79,16 @@ function filterStatus(games, statuses) {
   let returnGames = [];
   games.forEach(game => {
     if (game.status){
-      Object.keys(game.status).map((key) => {
+      let keys = Object.keys(game.status);
+      for (let k=0; k<keys.length; k++){
+        let key = keys[k];
         for(let i=0; i<statuses.length; i++){
           if (game.status[key][statuses[i]]){
             returnGames.push(game);
             return;
           }
         }
-      })
+      }
     }
   });
   return returnGames;
