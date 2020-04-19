@@ -7,7 +7,6 @@ import StatusMap from './status_map.js';
 import './list-style.css';
 
 function GameDisplay(props) {
-  console.log(props)
   return (
     <div>
         <div>
@@ -49,7 +48,6 @@ class AddGame extends React.Component {
           search: name,
         }
       }).then( response => {
-        console.log(response)
         this.setState({
           found: response.data
         })
@@ -270,7 +268,6 @@ class MyGames extends React.Component {
             "Authorization": "JWT " + this.props.token,
           }
         }).then( response => {
-          console.log(response)
            this.setState({
             games: response.data,
             render_games: response.data,

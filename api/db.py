@@ -209,7 +209,8 @@ def merge_owners(games):
         gid = game["info"]["id"]
         if gid not in game_dict:
             game_dict[gid] = game["info"]
-        game_owners[gid].append(game["owner"])
+        if game["status"]["possesed"]:
+            game_owners[gid].append(game["owner"])
         game_status[gid][game["owner"]] = game["status"]
 
 

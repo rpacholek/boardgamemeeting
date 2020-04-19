@@ -127,7 +127,6 @@ class Games extends React.Component {
           "Authorization": "JWT " + this.props.token,
         },
       }).then( response => {
-        console.log(response)
         this.setState({
           games: response.data,
           render_games: response.data,

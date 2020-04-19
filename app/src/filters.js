@@ -11,7 +11,7 @@ import StatusMap from './status_map.js';
 function getAllOwners(games){
     let owners = new Set();
     games.forEach(game => {
-      if (game.owners) {
+      if (Object.keys(game.status)) {
         game.owners.forEach(owner => owners.add(owner));
       } else {
         //owners.add("Unknown");
@@ -25,7 +25,7 @@ function filterOwners(games, owners) {
   games.forEach(game => {
     if (game.owners){
       for(let i=0; i<owners.length; i++){
-        if (game.owners.indexOf(owners[i]) != -1){
+        if (Object.keys(game.status).indexOf(owners[i]) != -1){
           returnGames.push(game);
           break;
         }
@@ -99,7 +99,6 @@ function filterStatus(games, statuses) {
 class OwnerFilter extends React.Component {
   constructor(props) {
     super(props);
-    console.log("Created");
 
     this.state = {
       modifier: props.modifier,
@@ -116,14 +115,12 @@ class OwnerFilter extends React.Component {
     for(let i=0; i<selected.length; ++i){
       selected_owners.push(owners[selected[i]]);
     };
-    console.log(selected_owners);
 
     this.state.modifier(games => filterOwners(games, selected_owners));
   }
 
   render() {
     const owners = getAllOwners(this.props.games);
-    console.log(this.state.selected);
     return (
       <div className="filter-list">
         <List
@@ -150,12 +147,11 @@ class GameStatusFilter extends React.Component {
     this.state = {
       modifier: props.modifier,
       games: props.games,
-      selected: [0]
+      selected: []
     }
   }
   
   handleChange(statuses, selected) {
-    console.log(selected);
     this.setState({selected: selected});
     let selected_status = [];
     for(let i=0; i<selected.length; ++i){

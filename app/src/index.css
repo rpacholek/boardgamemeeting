@@ -1,6 +1,5 @@
 body {
   font: 14px "Century Gothic", Futura, sans-serif;
-  margin: 20px;
 }
 
 .game {
@@ -30,7 +29,7 @@ body {
 .game-title-bar {
   position: absolute;
   top: 0px;
-  width: 85%;
+  width: 88%;
   line-height: 240px;
 }
 
