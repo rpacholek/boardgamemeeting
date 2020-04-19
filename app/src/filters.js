@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import 'bulma'
 import InputRange from 'react-input-range';
+import List from 'react-list-select';
 
 
 // Filter functions
@@ -80,34 +81,35 @@ function filterTime(games, value){
 class OwnerFilter extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       modifier: props.modifier,
       games: props.games,
+      selected: []
     }
 
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(event) {
-    let owners = [];
-    for(let i=0; i<event.target.selectedOptions.length; ++i){
-      owners.push(event.target.selectedOptions[i].value);
+  handleChange(owners, selected) {
+    this.setState({selected: selected});
+    let selected_owners = [];
+    for(let i=0; i<selected.length; ++i){
+      selected_owners.push(owners[selected[i]]);
     };
 
-    this.state.modifier(games => filterOwners(games, owners));
+    this.state.modifier(games => filterOwners(games, selected_owners));
   }
 
   render() {
     const owners = getAllOwners(this.props.games);
-    const owners_options = owners.map((owner) =>
-      <option className="filter-option">{owner}</option>
-    );
-
     return (
-      <div>
-        <select className="select is-multiple filter-select" onChange={this.handleChange}  multiple size="5">
-          {owners_options}
-        </select> 
+      <div className="filter-list">
+        <List
+            items={owners}
+            multiple={true}
+            selected={this.state.selected}
+            onChange={(selected) => {this.handleChange(owners, selected)}} />
       </div>
     )
   }
@@ -122,16 +124,28 @@ class GameStatusFilter extends React.Component {
    *  - on_radar
    *  - in_delivery
    */
+  constructor(props) {
+    super(props);
+    this.state = {
+      modifier: props.modifier,
+      games: props.games,
+      selected: [0]
+    }
+  }
+  
+  handleChange(statues, selected) {
+    // pass
+  }
+
   render(){
     const statuses = ["possesed", "new", "on radar", "soon", "not available"];
-    const status_options = statuses.map((o) => 
-      <option className="filter-option">{o}</option>
-    );
     return (
-      <div>
-        <select className="filter-select select is-multiple" multiple size="5">
-          {status_options}
-        </select>
+      <div className="filter-list">
+        <List
+            items={statuses}
+            multiple={true}
+            selected={this.state.selected}
+            onChange={(selected) => {this.handleChange(statuses, selected)}} />
       </div>
     )
   }
@@ -143,7 +157,7 @@ class PlayersFilter extends React.Component {
    this.state = {
       modifier: props.modifier,
       games: props.games,
-      value: {min: 3, max:4}
+      value: {min: 1, max:10}
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -157,7 +171,6 @@ class PlayersFilter extends React.Component {
   render(){
     return (
       <div className="game-range">
-        <h3>Number of players</h3>
         <InputRange 
             minValue={1} 
             maxValue={10} 
@@ -165,6 +178,7 @@ class PlayersFilter extends React.Component {
             value={this.state.value} 
             allowSameValues={true} 
             onChange={value => this.handleChange({value})} />
+        <h3>Number of players</h3>
       </div>
     )
   }
@@ -189,7 +203,6 @@ class ScoreFilter extends React.Component {
   render(){
     return (
       <div className="game-range">
-        <h3>Average rating</h3>
         <InputRange
           minValue={1} 
           maxValue={10} 
@@ -198,6 +211,7 @@ class ScoreFilter extends React.Component {
           value={this.state.value} 
           allowSameValues={true} 
           onChange={value => this.handleChange({value})} />
+        <h3>Average rating</h3>
       </div>
     )
   }
@@ -208,7 +222,7 @@ class WeightFitler extends React.Component {
       this.state = {
       modifier: props.modifier,
       games: props.games,
-      value: {min: 2, max:4}
+      value: {min: 1, max:5}
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -222,7 +236,6 @@ class WeightFitler extends React.Component {
   render(){
     return (
       <div className="game-range">
-        <h3>Average weight</h3>
         <InputRange 
           minValue={1} 
           maxValue={5} 
@@ -231,6 +244,7 @@ class WeightFitler extends React.Component {
           value={this.state.value} 
           allowSameValues={true} 
           onChange={value => this.handleChange({value})} />
+        <h3>Average weight</h3>
       </div>
     )
   }
@@ -256,7 +270,6 @@ class TimeFitler extends React.Component {
   render(){
     return (
       <div className="game-range">
-        <h3>Time</h3>
         <InputRange 
           minValue={5} 
           maxValue={240} 
@@ -264,6 +277,7 @@ class TimeFitler extends React.Component {
           value={this.state.value} 
           allowSameValues={true} 
           onChange={value => this.handleChange({value})} />
+        <h3>Time</h3>
       </div>
     )
   }
@@ -311,13 +325,15 @@ class GameFilter extends React.Component {
         <div className="columns">
         <div className="column">
           <OwnerFilter modifier={this.applyFilter(0)} games={this.props.games} />
-          <GameStatusFilter  modifier={this.applyFilter(1)} games={this.props.games} />
         </div>
         <div className="column">
           <PlayersFilter  modifier={this.applyFilter(2)} games={this.props.games} />
           <ScoreFilter  modifier={this.applyFilter(3)} games={this.props.games} />
           <WeightFitler  modifier={this.applyFilter(4)} games={this.props.games} />
           <TimeFitler  modifier={this.applyFilter(5)} games={this.props.games} />
+        </div>
+        <div className="column">
+          <GameStatusFilter  modifier={this.applyFilter(1)} games={this.props.games} />
         </div>
         </div>
       </section>
