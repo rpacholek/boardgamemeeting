@@ -67,7 +67,7 @@ class UserGames(db.Entity):
             self.on_radar = s["on_radar"]
         if "new" in s:
             self.new = s["new"]
-        if "now_available" in s:
+        if "not_available" in s:
             self.not_available = s["not_available"]
 
 
