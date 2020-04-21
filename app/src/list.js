@@ -5,6 +5,7 @@ import 'bulma'
 import InputRange from 'react-input-range';
 
 import GameFilter from './filters.js'; 
+import GameStats from './list/stats.js';
 
 class Game extends React.Component {
   render() {
@@ -50,7 +51,7 @@ class GameTable extends React.Component {
     const games = this.props.render_games;
     const gameList = games.map((game) =>
       <tr>
-        <td>{game.name}</td>
+        <th>{game.name}</th>
         <td>{game.owners.join(', ')}</td>
         <td>{game.time}</td>
         <td>{game.min_players}-{game.max_players}</td>
@@ -61,16 +62,20 @@ class GameTable extends React.Component {
 
     return (
       <div className="game-table">
-        <table>
-          <tr>
-            <td>Name</td>
-            <td>Owns</td>
-            <td>Time</td>
-            <td>People</td>
-            <td>Score</td>
-            <td>Weight</td>
-          </tr>
-          {gameList}
+        <table className="table is-hoverable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Owns</th>
+              <th>Time</th>
+              <th>People</th>
+              <th>Score</th>
+              <th>Weight</th>
+            </tr>
+          </thead>
+          <tbody>
+           {gameList}
+          </tbody>
         </table>
       </div>
     )
@@ -150,7 +155,7 @@ class Games extends React.Component {
         </div>
         {this.state.view == 0 && <GamePanel render_games={this.state.render_games} />}
         {this.state.view == 1 && <GameTable render_games={this.state.render_games} />}
-        {this.state.view == 2 && <h1>TODO</h1>}
+        {this.state.view == 2 && <GameStats games={this.state.render_games} />}
       </div>
     );
   }
