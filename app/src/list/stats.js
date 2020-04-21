@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import StatusMap from './status_map.js';
 
 class GamePlayerStat extends React.Component {
   collect(games) {
@@ -27,21 +28,33 @@ class GamePlayerStat extends React.Component {
     return result;
   }
 
+  get_summary(games) {
+    let s = Array(9);
+    games.map(game => {
+      for(let i = game.min_players-1; i < game.max_players; i++){
+        if(!s[i]) s[i] = 0;
+        s[i] += 1;
+      }
+    });
+    return s;
+  }
+
   render() {
     let collected = this.collect(this.props.games);
+    let summary = this.get_summary(this.props.games);
     let entries = collected.map(game => 
       <tr>
         <th>{game.owner}</th>
-        <th>{game[0]}</th>
-        <th>{game[1]}</th>
-        <th>{game[2]}</th>
-        <th>{game[3]}</th>
-        <th>{game[4]}</th>
-        <th>{game[5]}</th>
-        <th>{game[6]}</th>
-        <th>{game[7]}</th>
-        <th>{game[8]}</th>
-        <th>{game[9]}</th>
+        <td>{game[0]}</td>
+        <td>{game[1]}</td>
+        <td>{game[2]}</td>
+        <td>{game[3]}</td>
+        <td>{game[4]}</td>
+        <td>{game[5]}</td>
+        <td>{game[6]}</td>
+        <td>{game[7]}</td>
+        <td>{game[8]}</td>
+        <td>{game[9]}</td>
       </tr>
     );
     return (
@@ -51,21 +64,36 @@ class GamePlayerStat extends React.Component {
           <thead>
             <tr>
               <th>Who</th>
-              <td>1</td>
-              <td>2</td>
-              <td>3</td>
-              <td>4</td>
-              <td>5</td>
-              <td>6</td>
-              <td>7</td>
-              <td>8</td>
-              <td>9</td>
-              <td>10</td>
+              <th>1</th>
+              <th>2</th>
+              <th>3</th>
+              <th>4</th>
+              <th>5</th>
+              <th>6</th>
+              <th>7</th>
+              <th>8</th>
+              <th>9</th>
+              <th>10</th>
             </tr>
           </thead>
           <tbody>
             {entries}
           </tbody>
+          <tfoot>
+            <tr>
+              <th></th>
+              <th>{summary[0]}</th>
+              <th>{summary[1]}</th>
+              <th>{summary[2]}</th>
+              <th>{summary[3]}</th>
+              <th>{summary[4]}</th>
+              <th>{summary[5]}</th>
+              <th>{summary[6]}</th>
+              <th>{summary[7]}</th>
+              <th>{summary[8]}</th>
+              <th>{summary[9]}</th>
+            </tr>
+          </tfoot>
         </table>
       </div>
     )
@@ -181,7 +209,6 @@ class GameOwnedStat extends React.Component {
 
 class GameStatusStats extends React.Component {
   collect(games) {
-    console.log(games);
     let st = {}
     games.map(game => {
       let owners = Object.keys(game.status);
@@ -222,7 +249,7 @@ class GameStatusStats extends React.Component {
     let collected = this.collect(this.props.games);
     let entries = collected.map(game => 
       <tr>
-        <th>{game.st}</th>
+        <th>{StatusMap.displayName(game.st)}</th>
         <td>{game.count}</td>
         <td>{game.rating.toFixed(2)}</td>
         <td>{game.weight.toFixed(2)}</td>

@@ -4,7 +4,7 @@ import axios from 'axios';
 import 'bulma'
 import InputRange from 'react-input-range';
 import List from 'react-list-select';
-import StatusMap from './status_map.js';
+import StatusMap from './list/status_map.js';
 
 
 // Filter functions

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {DelayInput} from 'react-delay-input';
 import List from 'react-list-select';
 import axios from 'axios';
-import StatusMap from './status_map.js';
+import StatusMap from './list/status_map.js';
 import './list-style.css';
 
 function GameDisplay(props) {
