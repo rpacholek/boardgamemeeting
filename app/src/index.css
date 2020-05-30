@@ -211,3 +211,12 @@ body {
 .navbar {
   margin-bottom: 30px;
 }
+
+.profile-box {
+  margin: 0 auto;
+  width: 400px;
+}
+
+.stat-table {
+  margin: 0 auto;
+}

@@ -59,8 +59,8 @@ class GamePlayerStat extends React.Component {
     );
     return (
       <div>
-        <h2>Player Stats</h2>
-        <table className="table is-hoverable">
+        <h1 className="title">Player Stats</h1>
+        <table className="stat-table table is-hoverable">
           <thead>
             <tr>
               <th>Who</th>
@@ -175,9 +175,9 @@ class GameOwnedStat extends React.Component {
     let summary = this.gen_summary(this.props.games);
     return (
       <div>
-        <h2>General Stats</h2>
+        <h1 className="title">General Stats</h1>
         
-        <table className="table is-hoverable">
+        <table className="stat-table table is-hoverable">
           <thead>
             <tr>
               <th>Who</th>
@@ -257,9 +257,9 @@ class GameStatusStats extends React.Component {
     );
     return (
       <div>
-        <h2>Status Stats</h2>
+        <h1 className="title">Status Stats</h1>
         
-        <table className="table is-hoverable">
+        <table className="stat-table table is-hoverable">
           <thead>
             <tr>
               <th>Status</th>
