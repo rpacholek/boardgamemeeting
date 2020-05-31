@@ -4,6 +4,7 @@ import './index.css';
 import 'react-input-range/lib/css/index.css'
 import Games from './list.js';
 import MyGames from './add.js';
+import Profile from './profile.js';
 import axios from 'axios';
 import {
   BrowserRouter as Router,
@@ -93,7 +94,7 @@ class Menu extends React.Component {
             <h1>Meeting</h1>
           </Route>
           <Route path="/profile">
-            <h1>Profile</h1>
+            <Profile token={this.state.token} />
           </Route>
         </Switch>
       </Router>

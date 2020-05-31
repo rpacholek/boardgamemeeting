@@ -109,6 +109,10 @@ def get_user(name, password):
     return Users.get(name=name, password=hash_password(password))
 
 @db_session
+def change_password(name, password):
+    Users.get(name=name).password = hash_password(password)
+
+@db_session
 def get_user_by_id(userid):
     return Users.get(id=userid)
 
@@ -149,23 +153,34 @@ def add_friend(user, name):
 @db_session
 def invite_friend(user, name):
     user = Users.get(name=user)
-    friend = User.get(name=name)
+    friend = Users.get(name=name)
     if friend:
         friend.invitations.add(user)
+    else:
+        print("No friend found")
 
 @db_session
 def invite_accept(user, name):
     user = Users.get(name=user)
+    friends = list(user.invitations.select(lambda f: f.name == name))
+    print(user)
     if friends:
         friends[0].friends.add(user)
         user.friends.add(friends[0])
 
+        user.invitations.remove(friends[0])
+        friends[0].invitations.remove(user)
+    else:
+        print("No friend found")
+
 @db_session
 def invite_decline(user, name):
     user = Users.get(name=user)
-    friends = user.invitations.select(lambda f: f.name == name)
+    friends = list(user.invitations.select(lambda f: f.name == name))
     if friends:
-        user.invitations.delete(friends[0])
+        user.invitations.remove(friends[0])
+    else:
+        print("No friend found")
 
 @db_session
 def invitations_list(user):
@@ -178,12 +193,14 @@ def friends_list(user):
     return [friend.name for friend in user.friends]
 
 @db_session
-def friends_remove(user, name):
-    user = Users.get(name=user)
-    friends = user.invitations.select(lambda f: f.name == name)
+def friends_remove(username, name):
+    user = Users.get(name=username)
+    friends = list(user.friends.select(lambda f: f.name == name))
     if friends:
-        user.friends.delete(friends[0])
-        friends[0].friends.delete(user)
+        user.friends.remove(friends[0])
+        friends[0].friends.remove(user)
+    else:
+        print("No friend found")
 
 @db_session
 def list_user_games(user):

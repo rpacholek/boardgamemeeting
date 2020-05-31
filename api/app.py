@@ -63,20 +63,45 @@ def add_user_game():
 def list_user_game():
     return json.dumps(db.list_user_games(current_identity))
 
-@app.route('/api/user/friends')
+@app.route('/api/user/friends', methods=['GET'])
 @jwt_required()
-def list_friends():
-    pass
+def friends():
+    return json.dumps(db.friends_list(current_identity))
+
+@app.route('/api/user/friends/<friend>', methods=['DELETE'])
+@jwt_required()
+def delete_friend(friend):
+    db.friends_remove(current_identity, friend)
+    return 'OK'
 
 @app.route('/api/user/invitations', methods=['GET', 'POST'])
 @jwt_required()
 def list_invitations():
-    pass
+    if request.method == 'GET':
+        return json.dumps(db.invitations_list(current_identity))
+    elif request.method == 'POST':
+        data = json.loads(request.data)
+        db.invite_friend(current_identity, data['friend'])
+    return 'OK'
 
 @app.route('/api/user/invitations/<inv_id>', methods=['POST', 'DELETE'])
 @jwt_required()
 def handle_invitation(inv_id):
-    pass
+    if request.method == 'POST':
+        db.invite_accept(current_identity, inv_id)
+    elif request.method == 'DELETE':
+        db.invite_decline(current_identity, inv_id)
+    return 'OK'
+
+@app.route('/api/user/password', methods=['POST'])
+@jwt_required()
+def change_password():
+    print(request.data)
+    data = json.loads(request.data)
+    password = data.get("password", None)
+    if password:
+        db.change_password(current_identity, password)
+    return 'OK'
 
 @app.route('/api')
 def alive_check():
