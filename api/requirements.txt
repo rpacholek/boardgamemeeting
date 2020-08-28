@@ -16,3 +16,4 @@ requests-cache==0.5.2
 six==1.14.0
 urllib3==1.25.8
 Werkzeug==1.0.1
+gunicorn==20.0.4
