@@ -13,6 +13,7 @@
     "react": "^16.13.1",
     "react-delay-input": "^4.1.0",
     "react-dom": "^16.13.0",
+    "react-icons": "^3.11.0",
     "react-input-range": "^1.3.0",
     "react-list-select": "^0.4.1",
     "react-router-dom": "^5.1.2",

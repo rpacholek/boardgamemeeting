@@ -5,6 +5,7 @@ import List from 'react-list-select';
 import axios from 'axios';
 import StatusMap from './list/status_map.js';
 import './list-style.css';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 function GameDisplay(props) {
   return (
@@ -26,17 +27,24 @@ class AddGame extends React.Component {
         "image": "",
         "id": 0
       },
+      "selected_id": -1,
       "status": StatusMap.defaultDBMap(),
       "found": [],
+      "isSearching": false,
     }
 
     this.state = {...this.clear_state};
     this.toggleStatus = this.toggleStatus.bind(this);
     this.addGame = this.addGame.bind(this);
+
+    this.search_status_ref = React.createRef();
   }
 
   search(name) {
     if (name) {
+      this.setState({
+        isSearching: true,
+      })
       axios({
         method: 'POST',
         url: '/api/search',
@@ -48,11 +56,17 @@ class AddGame extends React.Component {
           search: name,
         }
       }).then( response => {
+        console.log(response.data);
         this.setState({
-          found: response.data
+          found: response.data,
+          isSearching: false,
+          selected_id: -1,
         })
       }).catch( error => {
         console.log(error);
+        this.setState({
+          isSearching: false,
+        })
       })
     }
   }
@@ -97,25 +111,32 @@ class AddGame extends React.Component {
     let itemList = [];
     this.state.found.forEach(o => {itemList.push(o.name)});
     let selected = [];
-    if (this.state.selected.name){
-      selected.push(itemList.indexOf(this.state.selected.name));
+    if (this.state.selected_id != -1){
+      selected.push(this.state.selected_id);
     }
 
     return (
       <div>
      <div className="columns">
         <div className="column">
-          <DelayInput
-            minLength={2}
-            delayTimeout={1000}
-            onChange={event => this.search(event.target.value)} />
+          <div>
+            <DelayInput
+              minLength={2}
+              delayTimeout={1000}
+              onChange={event => this.search(event.target.value)} />
+            <span className={"icon is-medium "+(this.state.isSearching?"":"is-hidden")} ref={this.search_status_ref}>
+              <span className="fa-stack">
+                  <AiOutlineLoading3Quarters className="fas fa-spinner fa-pulse spinner" />
+              </span>
+            </span>
+          </div>
 
           <div>
             <List
               items={itemList}
               multiple={false}
               selected={selected}
-              onChange={(selected) => {this.setState({selected: this.state.found[selected]})}} />
+              onChange={(selected) => {this.setState({selected: this.state.found[selected], selected_id: selected})}} />
           </div>
         </div>
 
