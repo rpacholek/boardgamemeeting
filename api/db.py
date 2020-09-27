@@ -3,6 +3,7 @@ from decimal import Decimal
 from collections import defaultdict
 import hashlib
 from bggengine import *
+import os
 
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
@@ -20,8 +21,9 @@ class Games(db.Entity):
     time = Required(int)
     min_players = Required(int)
     max_players = Required(int)
-    rating = Required(Decimal, 2, 2)
-    weight = Required(Decimal, 2, 2)
+    rating = Required(float)
+    weight = Required(float)
+    mass = Optional(float)
 
     def get_dict(self):
         return {
@@ -82,7 +84,15 @@ class Users(db.Entity):
     games = Set('UserGames', reverse='user')
 
 
-db.bind(provider='sqlite', filename='database.sqlite', create_db=True)
+if "POSTGRES_USER" in os.environ:
+    db.bind(provider='postgres',
+            user=os.environ["POSTGRES_USER"],
+            password=os.environ["POSTGRES_PASSWORD"],
+            database="postgresdb",
+            host=os.environ["POSTGRES_URL"])
+else:
+    db.bind(provider='sqlite', filename='database.sqlite', create_db=True)
+
 db.generate_mapping(create_tables=True)
 
 @db_session

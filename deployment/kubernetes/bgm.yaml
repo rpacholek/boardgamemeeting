@@ -5,8 +5,8 @@ metadata:
 data:
   nginx.conf: |
     server {
-      listen 80;
-      listen [::]:80;
+      listen 8081;
+      listen [::]:8081;
 
       server_name _;
 
@@ -34,7 +34,6 @@ data:
           expires max;
       }
     }
-
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -54,9 +53,9 @@ spec:
       - name: bgmnginx
         image: localhost:32000/bgm-front
         ports:
-        - containerPort: 80
+        - containerPort: 8081
         volumeMounts:
-        - mountPath: /etc/nginx/conf.d/default.conf
+        - mountPath: /etc/nginx/conf.d/default.conf # mount nginx-conf volumn to /etc/nginx
           subPath: default.conf
           name: nginx-conf
         - mountPath: /var/log/nginx
@@ -64,7 +63,7 @@ spec:
       volumes:
       - name: nginx-conf
         configMap:
-          name: nginx-conf
+          name: nginx-conf # place ConfigMap `nginx-conf` on /etc/nginx
           items:
             - key: nginx.conf
               path: default.conf
@@ -91,7 +90,13 @@ spec:
         image: localhost:32000/bgm-back
         ports:
         - containerPort: 8080
-
+        env:
+          - name: POSTGRES_URL
+            value: "postgres.default.svc.cluster.local"
+          - name: POSTGRES_USER
+            value: postgresadmin
+          - name: POSTGRES_PASSWORD
+            value: admin123
 ---
 apiVersion: v1
 kind: Service
@@ -100,10 +105,10 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 80
+  - port: 8081
     nodePort: 32501
     protocol: TCP
-    targetPort: 80
+    targetPort: 8081
   selector:
     run: bgmnginx
 
