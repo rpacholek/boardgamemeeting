@@ -220,3 +220,15 @@ body {
 .stat-table {
   margin: 0 auto;
 }
+
+.new-band {
+	background-color: #dd4004fa;
+	width: 70px;
+	transform: rotate(30deg);
+	position: absolute;
+	top: 30px;
+	right: 30px;
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
+}
