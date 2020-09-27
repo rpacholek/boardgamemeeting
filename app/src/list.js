@@ -28,7 +28,7 @@ class Game extends React.Component {
             <div className="game-main">
                 <div className="game-image">
                   <img src={this.props.value.image} alt={this.props.value.name} className="game-front" />
-                  <div className={"new-band"+(isNew(this.props.value.status)?"":"is-invisible")}>New</div>
+                  <div className={"new-band "+(isNew(this.props.value.status)?"":"is-invisible")}>New</div>
                 </div>
                 <div className="game-title-bar">
                   <h1 className="game-title is-size-3">{this.props.value.name}</h1>

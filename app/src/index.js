@@ -71,6 +71,9 @@ class Menu extends React.Component {
                 <Link to="/my-games" className="navbar-item is-spaced">
                   MyGames
                 </Link>
+                <Link to="/on-radar" className="navbar-item is-spaced">
+                  OnRadar
+                </Link>
                 <Link to="/meeting" className="navbar-item is-spaced">
                   Meeting
                 </Link>
@@ -95,6 +98,9 @@ class Menu extends React.Component {
           </Route>
           <Route path="/profile">
             <Profile token={this.state.token} />
+          </Route>
+          <Route path="/on-radar">
+            <h1>On radar</h1>
           </Route>
         </Switch>
       </Router>
