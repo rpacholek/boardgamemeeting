@@ -103,24 +103,30 @@ class OwnerFilter extends React.Component {
     this.state = {
       modifier: props.modifier,
       games: props.games,
-      selected: []
+      selected: [],
+      initial_selected: true,
     }
+    console.log(this.state);
 
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(owners, selected) {
-    this.setState({selected: selected});
+    this.setState({selected: selected, initial_selected: false});
     let selected_owners = [];
     for(let i=0; i<selected.length; ++i){
       selected_owners.push(owners[selected[i]]);
     };
+    console.log(this.state.selected, this.state.selected.length);
 
     this.state.modifier(games => filterOwners(games, selected_owners));
   }
 
   render() {
     const owners = getAllOwners(this.props.games);
+    if (this.state.initial_selected && this.state.selected.length == 0 && owners.length > 0) {
+      this.handleChange(owners, Array.from(Array(owners.length).keys()));
+    }
     return (
       <div className="filter-list">
         <List

@@ -96,7 +96,8 @@ class GameTable extends React.Component {
 class GamePanel extends React.Component {
   render() {
     const games = this.props.render_games;
-    const gameList = games.map((game) =>
+    const gamesSorted = games.sort(function (a, b) {return a.name > b.name});
+    const gameList = gamesSorted.map((game) =>
       <Game key={game.objectid} value={game} />
     );
 
