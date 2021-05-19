@@ -85,12 +85,14 @@ class Users(db.Entity):
 
 
 if "POSTGRES_USER" in os.environ:
+    print("Use postgres")
     db.bind(provider='postgres',
             user=os.environ["POSTGRES_USER"],
             password=os.environ["POSTGRES_PASSWORD"],
             database="postgresdb",
             host=os.environ["POSTGRES_URL"])
 else:
+    print("Use sqlite")
     db.bind(provider='sqlite', filename='database.sqlite', create_db=True)
 
 db.generate_mapping(create_tables=True)
